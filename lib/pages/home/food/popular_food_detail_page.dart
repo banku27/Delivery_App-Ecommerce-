@@ -1,5 +1,6 @@
 import 'package:ecommerce/widget/app_column.dart';
 import 'package:ecommerce/widget/app_icon.dart';
+import 'package:ecommerce/widget/expandable_text_widget.dart';
 import 'package:ecommerce/widget/textandicon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,7 +43,7 @@ class PopularFoodDetail extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 0,
-            top: 280.h,
+            top: 290.h,
             child: Container(
               padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 15.h),
               height: 300.h,
@@ -51,13 +52,38 @@ class PopularFoodDetail extends StatelessWidget {
                       topLeft: Radius.circular(15.r),
                       topRight: Radius.circular(15.r)),
                   color: Colors.white),
-              child: AppColumn(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const AppColumn(),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Text(
+                    'Introduce',
+                    style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black54),
+                  ),
+                  SizedBox(
+                    height: 5.h,
+                  ),
+                  const Expanded(
+                    child: SingleChildScrollView(
+                      child: ExpandableTextWidget(
+                          text:
+                              'pankaj is my love pankaj is my love pankaj is my love vvvpankaj is my love pankaj is my love pankaj is my love'),
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         ],
       ),
       bottomNavigationBar: Container(
-        height: 120.h,
+        height: 110.h,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30.r),
