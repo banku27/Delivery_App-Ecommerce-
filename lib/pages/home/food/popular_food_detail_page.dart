@@ -73,7 +73,7 @@ class PopularFoodDetail extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: ExpandableTextWidget(
                           text:
-                              'pankaj is my love pankaj is my love pankaj is my love vvvpankaj is my love pankaj is my love pankaj is my love'),
+                              'Pasta makes a quick dinner or lunch box dish for your kids..It is healthy and filling at the same time, plus your kids will love it for sure. And you can almost add anything, any vegetables in the pasta. Pasta is quite bland on its own, so it picks up the flavours which you add beautifully.'),
                     ),
                   )
                 ],
