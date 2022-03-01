@@ -9,6 +9,7 @@ class RecommendedFoodDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -50,15 +51,17 @@ class RecommendedFoodDetail extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.r, horizontal: 8.r),
                     child: Icon(
                       Icons.favorite,
                       size: 28,
                       color: Color(0XFF23D678).withOpacity(0.8),
                     ),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.r),
-                        color: Colors.white),
+                      borderRadius: BorderRadius.circular(10.r),
+                      color: Colors.white,
+                    ),
                   ),
                   Container(
                     margin: EdgeInsets.only(right: 20.w),
@@ -76,7 +79,6 @@ class RecommendedFoodDetail extends StatelessWidget {
               )),
         ],
       ),
-      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
