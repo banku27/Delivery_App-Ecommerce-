@@ -1,7 +1,10 @@
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:ecommerce/controller/popular_product_controller.dart';
+import 'package:ecommerce/utils/constants.dart';
 import 'package:ecommerce/widget/textandicon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class MainFoodPage extends StatefulWidget {
   const MainFoodPage({Key? key}) : super(key: key);
@@ -24,31 +27,40 @@ class _MainFoodPageState extends State<MainFoodPage> {
     return ScreenUtilInit(
       builder: () => Column(
         children: [
-          Container(
-            height: 320.h,
-            // color: Colors.red,
-            child: PageView.builder(
-                controller: pageController,
-                itemCount: 5,
-                onPageChanged: (int index) {
-                  setState(() {
-                    currentIndex = index.toDouble();
-                  });
-                },
-                itemBuilder: (context, position) {
-                  return _buildPageItem(position);
-                }),
-          ),
-          DotsIndicator(
-            dotsCount: 5,
-            position: currentIndex,
-            decorator: DotsDecorator(
-                activeColor: Color(0XFF23D678).withOpacity(0.6),
-                size: Size.square(9.r),
-                activeSize: Size(18.r, 10.r),
-                activeShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.r))),
-          ),
+          GetBuilder<PopularProductController>(builder: (popularProducts) {
+            return Container(
+              height: 320.h,
+              // color: Colors.red,
+              child: PageView.builder(
+                  controller: pageController,
+                  itemCount: popularProducts.popularProductList.length,
+                  onPageChanged: (int index) {
+                    setState(() {
+                      currentIndex = index.toDouble();
+                    });
+                  },
+                  itemBuilder: (context, position) {
+                    return _buildPageItem(
+                        position, popularProducts.popularProductList[position]);
+                  }),
+            );
+          }),
+          GetBuilder<PopularProductController>(builder: (popularProducts) {
+            return DotsIndicator(
+              dotsCount: popularProducts.popularProductList.isEmpty
+                  ? 1
+                  : popularProducts.popularProductList.length,
+              // ? 1
+              // : popularProducts.popularProductList.length,
+              position: currentIndex,
+              decorator: DotsDecorator(
+                  activeColor: Color(0XFF23D678).withOpacity(0.6),
+                  size: Size.square(9.r),
+                  activeSize: Size(18.r, 10.r),
+                  activeShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.r))),
+            );
+          }),
           SizedBox(height: 25.h),
           Container(
             child: Row(
@@ -177,7 +189,8 @@ class _MainFoodPageState extends State<MainFoodPage> {
     );
   }
 
-  Widget _buildPageItem(int index) {
+  Widget _buildPageItem(int index, popularProductList) {
+    // var popularProduct;
     return Stack(
       children: [
         Container(
@@ -186,8 +199,11 @@ class _MainFoodPageState extends State<MainFoodPage> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.r),
               color: Colors.blueGrey,
-              image: const DecorationImage(
-                  image: AssetImage('assets/frankie.jpg'), fit: BoxFit.cover)),
+              image: DecorationImage(
+                  image: NetworkImage(AppConstants.BASE_URL +
+                      "/uploads" +
+                      popularProductList.img),
+                  fit: BoxFit.cover)),
         ),
         Align(
           alignment: Alignment.bottomCenter,
