@@ -1,3 +1,4 @@
+import 'package:ecommerce/utils/constants.dart';
 import 'package:get/get.dart';
 
 class ApiClient extends GetConnect implements GetxService {
@@ -9,14 +10,13 @@ class ApiClient extends GetConnect implements GetxService {
   }) {
     baseUrl = appBaseUrl;
     timeout = Duration(seconds: 30);
+    token = AppConstants.TOKEN;
     _mainHeaders = {
       'Content-type': 'application/json; charset=DUTF-8',
       'Authorization': 'Bearer $token',
     };
   }
-  Future<Response> getData(
-    String uri,
-  ) async {
+  Future<Response> getData(String uri) async {
     try {
       Response response = await get(uri);
       return response;
