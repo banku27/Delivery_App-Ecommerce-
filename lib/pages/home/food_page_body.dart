@@ -1,5 +1,6 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:ecommerce/controller/popular_product_controller.dart';
+import 'package:ecommerce/models/popular_products_models.dart';
 import 'package:ecommerce/utils/constants.dart';
 import 'package:ecommerce/widget/textandicon.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +51,6 @@ class _MainFoodPageState extends State<MainFoodPage> {
               dotsCount: popularProducts.popularProductList.isEmpty
                   ? 1
                   : popularProducts.popularProductList.length,
-              // ? 1
-              // : popularProducts.popularProductList.length,
               position: currentIndex,
               decorator: DotsDecorator(
                   activeColor: Color(0XFF23D678).withOpacity(0.6),
@@ -189,7 +188,8 @@ class _MainFoodPageState extends State<MainFoodPage> {
     );
   }
 
-  Widget _buildPageItem(int index, popularProductList) {
+  Widget _buildPageItem(int index, ProductModel popularProduct) {
+    // var popularProduct;
     // var popularProduct;
     return Stack(
       children: [
@@ -200,9 +200,8 @@ class _MainFoodPageState extends State<MainFoodPage> {
               borderRadius: BorderRadius.circular(30.r),
               color: Colors.blueGrey,
               image: DecorationImage(
-                  image: NetworkImage(AppConstants.BASE_URL +
-                      "/uploads" +
-                      popularProductList.img),
+                  image: NetworkImage(
+                      AppConstants.BASE_URL + "/uploads/" + popularProduct.img),
                   fit: BoxFit.cover)),
         ),
         Align(
@@ -233,7 +232,7 @@ class _MainFoodPageState extends State<MainFoodPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Chinese Frankie',
+                    popularProduct.name,
                     style: TextStyle(fontSize: 18.sp),
                   ),
                   SizedBox(
