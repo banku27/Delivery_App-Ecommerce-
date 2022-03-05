@@ -1,5 +1,6 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:ecommerce/controller/popular_product_controller.dart';
+import 'package:ecommerce/data/api/request.dart';
 import 'package:ecommerce/models/popular_products_models.dart';
 import 'package:ecommerce/utils/constants.dart';
 import 'package:ecommerce/widget/textandicon.dart';
@@ -19,176 +20,185 @@ class _MainFoodPageState extends State<MainFoodPage> {
 
   PageController pageController = PageController(viewportFraction: 0.85);
 
+  ProductModel? productModel;
+
+  @override
+  void initState() {
+    getProducts();
+    super.initState();
+  }
+
+  void getProducts() async {
+    productModel = await ApiReq().getProducts();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     // final h = MediaQuery.of(context).size.height;
     // print(h);
     // final w = MediaQuery.of(context).size.width;
     // print(w);
-    return ScreenUtilInit(
-      builder: () => Column(
-        children: [
-          GetBuilder<PopularProductController>(builder: (popularProducts) {
-            return Container(
-              height: 320.h,
-              // color: Colors.red,
-              child: PageView.builder(
-                  controller: pageController,
-                  itemCount: popularProducts.popularProductList.length,
-                  onPageChanged: (int index) {
-                    setState(() {
-                      currentIndex = index.toDouble();
-                    });
-                  },
-                  itemBuilder: (context, position) {
-                    return _buildPageItem(
-                        position, popularProducts.popularProductList[position]);
-                  }),
-            );
-          }),
-          GetBuilder<PopularProductController>(builder: (popularProducts) {
-            return DotsIndicator(
-              dotsCount: popularProducts.popularProductList.isEmpty
-                  ? 1
-                  : popularProducts.popularProductList.length,
-              position: currentIndex,
-              decorator: DotsDecorator(
-                  activeColor: Color(0XFF23D678).withOpacity(0.6),
-                  size: Size.square(9.r),
-                  activeSize: Size(18.r, 10.r),
-                  activeShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.r))),
-            );
-          }),
-          SizedBox(height: 25.h),
-          Container(
-            child: Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 15.0.w),
-                  child: Text(
-                    'Popular',
-                    style:
-                        TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
-                  ),
-                ),
-                SizedBox(
-                  width: 5.w,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 8.0.h),
-                  child: const Text(
-                    '.',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                ),
-                SizedBox(
-                  width: 5.w,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 3.0.h),
-                  child: Text(
-                    'Recommended',
-                    style: TextStyle(color: Colors.grey, fontSize: 11.sp),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.only(left: 20.w, bottom: 10.h),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 120.h,
-                        width: 120.w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.r),
-                          color: Colors.grey,
-                          image: const DecorationImage(
-                              image: AssetImage('assets/chillipaneer.jpg'),
-                              fit: BoxFit.cover),
-                        ),
+    return productModel == null
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Column(
+            children: [
+              Container(
+                height: 320.h,
+                // color: Colors.red,
+                child: PageView.builder(
+                    controller: pageController,
+                    itemCount: productModel!.products!.length,
+                    onPageChanged: (int index) {
+                      setState(() {
+                        currentIndex = index.toDouble();
+                      });
+                    },
+                    itemBuilder: (context, position) {
+                      return _buildPageItem(position);
+                    }),
+              ),
+              DotsIndicator(
+                dotsCount: productModel!.products!.length,
+                position: currentIndex,
+                decorator: DotsDecorator(
+                    activeColor: Color(0XFF23D678).withOpacity(0.6),
+                    size: Size.square(9.r),
+                    activeSize: Size(18.r, 10.r),
+                    activeShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.r))),
+              ),
+              SizedBox(height: 25.h),
+              Container(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 15.0.w),
+                      child: Text(
+                        'Popular',
+                        style: TextStyle(
+                            fontSize: 15.sp, fontWeight: FontWeight.w500),
                       ),
-                      Expanded(
-                        child: Container(
-                          height: 100.h,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(8.r),
-                                  bottomRight: Radius.circular(8.r)),
-                              color: Colors.white),
-                          child: Padding(
-                            padding:
-                                EdgeInsets.only(left: 10.0.w, right: 10.0.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Hydrabadi Biryani',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 17.sp),
-                                ),
-                                SizedBox(
-                                  height: 10.h,
-                                ),
-                                Text(
-                                  'With hydrabadi taste',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 11.sp),
-                                ),
-                                SizedBox(
-                                  height: 10.h,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const TextAndIconWidget(
-                                        icon: Icons.circle,
-                                        text: 'Normal',
-                                        color: Colors.black38,
-                                        iconColor: Colors.amber),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    const TextAndIconWidget(
-                                        icon: Icons.location_on,
-                                        text: '1.2km',
-                                        color: Colors.black38,
-                                        iconColor: Color(0XFF23D678)),
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    const TextAndIconWidget(
-                                        icon: Icons.access_time_filled_rounded,
-                                        text: '28 min',
-                                        color: Colors.black38,
-                                        iconColor: Colors.redAccent)
-                                  ],
-                                ),
-                              ],
+                    ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.0.h),
+                      child: const Text(
+                        '.',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 3.0.h),
+                      child: Text(
+                        'Recommended',
+                        style: TextStyle(color: Colors.grey, fontSize: 11.sp),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.only(left: 20.w, bottom: 10.h),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 120.h,
+                            width: 120.w,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.r),
+                              color: Colors.grey,
+                              image: const DecorationImage(
+                                  image: AssetImage('assets/chillipaneer.jpg'),
+                                  fit: BoxFit.cover),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              })
-        ],
-      ),
-      designSize: Size(360, 780),
-    );
+                          Expanded(
+                            child: Container(
+                              height: 100.h,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(8.r),
+                                      bottomRight: Radius.circular(8.r)),
+                                  color: Colors.white),
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    left: 10.0.w, right: 10.0.w),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Hydrabadi Biryani',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 17.sp),
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Text(
+                                      'With hydrabadi taste',
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 11.sp),
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const TextAndIconWidget(
+                                            icon: Icons.circle,
+                                            text: 'Normal',
+                                            color: Colors.black38,
+                                            iconColor: Colors.amber),
+                                        SizedBox(
+                                          width: 5.w,
+                                        ),
+                                        const TextAndIconWidget(
+                                            icon: Icons.location_on,
+                                            text: '1.2km',
+                                            color: Colors.black38,
+                                            iconColor: Color(0XFF23D678)),
+                                        SizedBox(
+                                          width: 5.w,
+                                        ),
+                                        const TextAndIconWidget(
+                                            icon: Icons
+                                                .access_time_filled_rounded,
+                                            text: '28 min',
+                                            color: Colors.black38,
+                                            iconColor: Colors.redAccent)
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  })
+            ],
+          );
   }
 
-  Widget _buildPageItem(int index, ProductModel popularProduct) {
+  Widget _buildPageItem(int index) {
     // var popularProduct;
     // var popularProduct;
     return Stack(
@@ -197,12 +207,14 @@ class _MainFoodPageState extends State<MainFoodPage> {
           margin: EdgeInsets.only(left: 10.w, right: 10.w),
           height: 220.h,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.r),
-              color: Colors.blueGrey,
-              image: DecorationImage(
-                  image: NetworkImage(
-                      AppConstants.BASE_URL + "/uploads/" + popularProduct.img),
-                  fit: BoxFit.cover)),
+            borderRadius: BorderRadius.circular(30.r),
+            color: Colors.blueGrey,
+            image: DecorationImage(
+                image: NetworkImage(
+                  'https://mvs.bslmeiyu.com/uploads/${productModel!.products![index].img}',
+                ),
+                fit: BoxFit.cover),
+          ),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -232,7 +244,7 @@ class _MainFoodPageState extends State<MainFoodPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    popularProduct.name,
+                    productModel!.products![index].name!,
                     style: TextStyle(fontSize: 18.sp),
                   ),
                   SizedBox(

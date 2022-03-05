@@ -1,70 +1,58 @@
-import 'dart:convert';
+class ProductModel {
+  int? totalSize;
+  int? typeId;
+  int? offset;
+  List<Products>? products;
 
-Product productFromJson(String str) => Product.fromJson(json.decode(str));
+  ProductModel({this.totalSize, this.typeId, this.offset, this.products});
 
-class Product {
-  Product({
-    required totalSize,
-    required typeId,
-    required offset,
-    required products,
-  }) {
-    this._totalSize = totalSize;
-    this._typeId = typeId;
-    this._offset = offset;
-    this._products = products;
+  ProductModel.fromJson(Map<String, dynamic> json) {
+    totalSize = json['total_size'];
+    typeId = json['type_id'];
+    offset = json['offset'];
+    if (json['products'] != null) {
+      products = <Products>[];
+      json['products'].forEach((v) {
+        products!.add(Products.fromJson(v));
+      });
+    }
   }
-
-  int? _totalSize;
-  int? _typeId;
-  int? _offset;
-  late List<ProductModel> _products;
-  List<ProductModel> get products => _products;
-
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-        totalSize: json["total_size"],
-        typeId: json["type_id"],
-        offset: json["offset"],
-        products: List<ProductModel>.from(
-            json["products"].map((x) => ProductModel.fromJson(x))),
-      );
 }
 
-class ProductModel {
-  ProductModel({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.stars,
-    required this.img,
-    required this.location,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.typeId,
-  });
+class Products {
+  int? id;
+  String? name;
+  String? description;
+  int? price;
+  int? stars;
+  String? img;
+  String? location;
+  String? createdAt;
+  String? updatedAt;
+  int? typeId;
 
-  int id;
-  String name;
-  String description;
-  int price;
-  int stars;
-  String img;
-  String location;
-  DateTime createdAt;
-  DateTime updatedAt;
-  int typeId;
+  Products(
+      {this.id,
+      this.name,
+      this.description,
+      this.price,
+      this.stars,
+      this.img,
+      this.location,
+      this.createdAt,
+      this.updatedAt,
+      this.typeId});
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-        id: json["id"],
-        name: json["name"],
-        description: json["description"],
-        price: json["price"],
-        stars: json["stars"],
-        img: json["img"],
-        location: json["location"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        typeId: json["type_id"],
-      );
+  Products.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    description = json['description'];
+    price = json['price'];
+    stars = json['stars'];
+    img = json['img'];
+    location = json['location'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    typeId = json['type_id'];
+  }
 }
