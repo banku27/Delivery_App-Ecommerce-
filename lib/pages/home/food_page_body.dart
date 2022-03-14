@@ -38,6 +38,7 @@ class _MainFoodPageState extends State<MainFoodPage> {
   void dispose() {
     pageController.dispose();
     super.dispose();
+    //me making commit to check contyri
   }
 
   changeCatalog() async {
