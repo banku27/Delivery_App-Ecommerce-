@@ -1,3 +1,4 @@
+import 'package:ecommerce/models/popular_products_models.dart';
 import 'package:ecommerce/widget/app_column.dart';
 import 'package:ecommerce/widget/app_icon.dart';
 import 'package:ecommerce/widget/expandable_text_widget.dart';
@@ -6,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PopularFoodDetail extends StatelessWidget {
-  const PopularFoodDetail({Key? key}) : super(key: key);
+  final Products products;
+  const PopularFoodDetail({Key? key, required this.products}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +21,12 @@ class PopularFoodDetail extends StatelessWidget {
             child: Container(
               height: 300.h,
               width: double.maxFinite,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/Pasta.jpeg'),
-                      fit: BoxFit.cover)),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(
+                        'https://mvs.bslmeiyu.com/uploads/${products.img}'),
+                    fit: BoxFit.cover),
+              ),
             ),
           ),
           Positioned(
@@ -31,11 +35,16 @@ class PopularFoodDetail extends StatelessWidget {
             left: 20.w,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                AppIcon(
-                  icon: Icons.arrow_back_ios,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const AppIcon(
+                    icon: Icons.arrow_back_ios,
+                  ),
                 ),
-                AppIcon(icon: Icons.shopping_cart_outlined),
+                const AppIcon(icon: Icons.shopping_cart_outlined),
               ],
             ),
           ),
@@ -55,7 +64,9 @@ class PopularFoodDetail extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const AppColumn(),
+                  AppColumn(
+                    products: products,
+                  ),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -69,11 +80,9 @@ class PopularFoodDetail extends StatelessWidget {
                   SizedBox(
                     height: 5.h,
                   ),
-                  const Expanded(
+                  Expanded(
                     child: SingleChildScrollView(
-                      child: ExpandableTextWidget(
-                          text:
-                              'Pasta makes a quick dinner or lunch box dish for your kids..It is healthy and filling at the same time, plus your kids will love it for sure. And you can almost add anything, any vegetables in the pasta. Pasta is quite bland on its own, so it picks up the flavours which you add beautifully.'),
+                      child: ExpandableTextWidget(text: products.description!),
                     ),
                   )
                 ],
@@ -133,7 +142,7 @@ class PopularFoodDetail extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.r),
                   color: const Color(0XFF23D678).withOpacity(0.5)),
               child: Text(
-                '₹60 Add to cart',
+                '₹${products.price} Add to cart',
                 style: TextStyle(fontSize: 17.sp, color: Colors.white),
               ),
             ),

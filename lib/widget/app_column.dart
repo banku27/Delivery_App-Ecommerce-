@@ -1,9 +1,11 @@
+import 'package:ecommerce/models/popular_products_models.dart';
 import 'package:ecommerce/widget/textandicon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppColumn extends StatelessWidget {
-  const AppColumn({Key? key}) : super(key: key);
+  final Products products;
+  const AppColumn({Key? key, required this.products}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class AppColumn extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Chinese Pasta',
+          products.name!,
           style: TextStyle(fontSize: 18.sp),
         ),
         SizedBox(
@@ -21,7 +23,7 @@ class AppColumn extends StatelessWidget {
           children: [
             Wrap(
               children: List.generate(
-                5,
+                products.stars!,
                 (index) => Icon(
                   Icons.star,
                   color: Color(0XFF23D678),
@@ -31,7 +33,7 @@ class AppColumn extends StatelessWidget {
             ),
             SizedBox(width: 10.w),
             Text(
-              '5.0',
+              products.stars.toString(),
               style: TextStyle(color: Colors.black38, fontSize: 11.sp),
             ),
             SizedBox(width: 10.w),

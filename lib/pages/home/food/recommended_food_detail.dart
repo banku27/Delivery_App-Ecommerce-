@@ -1,11 +1,21 @@
+import 'package:ecommerce/models/recommended_products_models.dart';
 import 'package:ecommerce/widget/app_icon.dart';
 import 'package:ecommerce/widget/expandable_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-class RecommendedFoodDetail extends StatelessWidget {
-  const RecommendedFoodDetail({Key? key}) : super(key: key);
+class RecommendedFoodDetail extends StatefulWidget {
+  final Products products;
 
+  const RecommendedFoodDetail({Key? key, required this.products})
+      : super(key: key);
+
+  @override
+  State<RecommendedFoodDetail> createState() => _RecommendedFoodDetailState();
+}
+
+class _RecommendedFoodDetailState extends State<RecommendedFoodDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,21 +29,31 @@ class RecommendedFoodDetail extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppIcon(
-                  icon: Icons.remove,
-                  iconColor: Colors.white,
-                  backgroundColor: Color(0XFF23D678).withOpacity(0.8),
-                  size: 35.r,
+                InkWell(
+                  onTap: () {
+                    setQuantity(false);
+                  },
+                  child: AppIcon(
+                    icon: Icons.remove,
+                    iconColor: Colors.white,
+                    backgroundColor: Color(0XFF23D678).withOpacity(0.8),
+                    size: 35.r,
+                  ),
                 ),
                 Text(
-                  ' ₹80 ' + " X " + " 0 ",
+                  " ₹ ${widget.products.price}   X  +  $_quantity ",
                   style: TextStyle(fontSize: 25.sp),
                 ),
-                AppIcon(
-                  icon: Icons.add,
-                  iconColor: Colors.white,
-                  backgroundColor: Color(0XFF23D678).withOpacity(0.8),
-                  size: 35.r,
+                InkWell(
+                  onTap: () {
+                    setQuantity(true);
+                  },
+                  child: AppIcon(
+                    icon: Icons.add,
+                    iconColor: Colors.white,
+                    backgroundColor: Color(0XFF23D678).withOpacity(0.8),
+                    size: 35.r,
+                  ),
                 )
               ],
             ),
@@ -82,11 +102,16 @@ class RecommendedFoodDetail extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            automaticallyImplyLeading: false,
             toolbarHeight: 90.h,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppIcon(icon: Icons.clear),
+                InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: AppIcon(icon: Icons.clear)),
                 AppIcon(icon: Icons.shopping_cart_outlined),
               ],
             ),
@@ -101,7 +126,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                   width: double.maxFinite,
                   child: Center(
                     child: Text(
-                      'Chilli Paneer',
+                      widget.products.name!,
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 21.sp,
@@ -114,8 +139,8 @@ class RecommendedFoodDetail extends StatelessWidget {
             pinned: true,
             expandedHeight: 250.h,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.asset(
-                'assets/chillipaneer.jpg',
+              background: Image.network(
+                'https://mvs.bslmeiyu.com/uploads/${widget.products.img}',
                 fit: BoxFit.cover,
                 width: double.maxFinite,
               ),
@@ -127,8 +152,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.only(left: 20.w, right: 20.w),
                   child: ExpandableTextWidget(
-                    text:
-                        'Pasta makes a quick dinner or lunch box dish for your kids..It is healthy and filling at the same time, plus your kids will love it for sure. And you can almost add anything, any vegetables in the pasta. Pasta is quite bland on its own, so it picks up the flavours which you add beautifully. Pasta makes a quick dinner or lunch box dish for your kids..It is healthy and filling at the same time, plus your kids will love it for sure. And you can almost add anything, any vegetables in the pasta. Pasta is quite bland on its own, so it picks up the flavours which you add beautifully.Pasta makes a quick dinner or lunch box dish for your kids..It is healthy and filling at the same time, plus your kids will love it for sure. And you can almost add anything, any vegetables in the pasta. Pasta is quite bland on its own, so it picks up the flavours which you add beautifully.Pasta makes a quick dinner or lunch box dish for your kids..It is healthy and filling at the same time, plus your kids will love it for sure. And you can almost add anything, any vegetables in the pasta. Pasta is quite bland on its own, so it picks up the flavours which you add beautifully.Pasta makes a quick dinner or lunch box dish for your kids..It is healthy and filling at the same time, plus your kids will love it for sure. And you can almost add anything, any vegetables in the pasta. Pasta is quite bland on its own, so it picks up the flavours which you add beautifully.Pasta makes a quick dinner or lunch box dish for your kids..It is healthy and filling at the same time, plus your kids will love it for sure. And you can almost add anything, any vegetables in the pasta. Pasta is quite bland on its own, so it picks up the flavours which you add beautifully.',
+                    text: widget.products.description!,
                   ),
                 ),
               ],
@@ -137,5 +161,19 @@ class RecommendedFoodDetail extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  int _quantity = 0;
+  void setQuantity(bool isIncrement) {
+    if (isIncrement) {
+      print('incremented');
+      _quantity = _quantity + 1;
+      setState(() {});
+    } else {
+      if (_quantity != 0) {
+        _quantity = _quantity - 1;
+      }
+      setState(() {});
+    }
   }
 }
